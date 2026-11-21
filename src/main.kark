@@ -131,4 +131,5 @@ func main() {
     persist("data/state.dat", state)
     persist("data/report.dat", report)
     print("BUILD_MANAGER_OK targets=" + str(count_type(state, "TARGET")) + " builds=" + str(builds) + " results=" + str(count_type(state, "RESULT")))
+    r2_run()
 }
