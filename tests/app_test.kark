@@ -1,0 +1,64 @@
+func test_target_upsert() {
+    let state = ["TARGET|windows-x64|Windows 64-bit release"]
+    let out = []
+    let replaced = 0
+    let i = 0
+    while (i < len(state)) {
+        let f = split(state[i], "|")
+        if (f[0] == "TARGET" && f[1] == "windows-x64") {
+            push(out, "TARGET|windows-x64|Windows 64-bit release v2")
+            replaced = 1
+        } else {
+            push(out, state[i])
+        }
+        i = i + 1
+    }
+    state = out
+    assert_eq(replaced, 1)
+    assert_eq(len(state), 1)
+    assert_eq(split(state[0], "|")[2], "Windows 64-bit release v2")
+}
+
+func test_latest_result_retained() {
+    let state = ["RESULT|windows-x64|SUCCESS"]
+    let name = "windows-x64"
+    let rec = "RESULT|windows-x64|SUCCESS_RETRY"
+    let out = []
+    let replaced = 0
+    let i = 0
+    while (i < len(state)) {
+        let f = split(state[i], "|")
+        if (f[0] == "RESULT" && f[1] == name) { push(out, rec); replaced = 1 } else { push(out, state[i]) }
+        i = i + 1
+    }
+    if (replaced == 0) { push(out, rec) }
+    state = out
+    let found = ""
+    i = 0
+    while (i < len(state)) {
+        let f = split(state[i], "|")
+        if (f[0] == "RESULT" && f[1] == name) { found = f[2] }
+        i = i + 1
+    }
+    assert_eq(len(state), 1)
+    assert_eq(found, "SUCCESS_RETRY")
+}
+
+func test_result_lookup_fallback() {
+    let state = ["RESULT|windows-x64|SUCCESS", "TARGET|linux-x64|Linux 64-bit release"]
+    let result = "NONE"
+    let i = 0
+    while (i < len(state)) {
+        let f = split(state[i], "|")
+        if (f[0] == "RESULT" && f[1] == "linux-x64") { result = f[2] }
+        i = i + 1
+    }
+    assert_eq(result, "NONE")
+    i = 0
+    while (i < len(state)) {
+        let f = split(state[i], "|")
+        if (f[0] == "RESULT" && f[1] == "windows-x64") { result = f[2] }
+        i = i + 1
+    }
+    assert_eq(result, "SUCCESS")
+}

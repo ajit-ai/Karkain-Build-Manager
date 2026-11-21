@@ -1,0 +1,4 @@
+TARGET|windows-x64|Windows 64-bit release
+TARGET|linux-x64|Linux 64-bit release
+RESULT|windows-x64|SUCCESS_RETRY
+RESULT|linux-x64|FAILURE

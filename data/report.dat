@@ -1,0 +1,9 @@
+TARGET windows-x64 Windows 64-bit release
+TARGET linux-x64 Linux 64-bit release
+BUILD windows-x64 SUCCESS
+BUILD linux-x64 FAILURE
+RESULT windows-x64 SUCCESS
+RESULT linux-x64 FAILURE
+BUILD windows-x64 SUCCESS_RETRY
+RESULT windows-x64 SUCCESS_RETRY
+LIST
